@@ -35,6 +35,7 @@ texts = [
     "Я бы хотел пожаловаться на сервис"
 ]
 
+#Вывод результатов для texts
 for text, sentiment in zip(texts, predict_sentiment_base(texts)):
     print(f"Text: {text}\nSentiment: {sentiment}\n")
 
