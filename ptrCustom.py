@@ -37,6 +37,8 @@ texts = [
     "Я бы хотел пожаловаться на сервис"
 ]
 
+
+#Вызов функции для проверочного текста
 for text in texts:
     out = predict_sentiment_custom([text])
     print(f"text: {text}\nSentiment: {out}\n")
