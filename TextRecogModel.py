@@ -1,4 +1,4 @@
-def text_recognition(texts, weight):
+def text_recognition(texts, weight, gl = False): #gl - give list
     #this function using rubert to clf transcription text return sum all predict * weight
     import torch
     from transformers import AutoTokenizer, AutoModelForSequenceClassification
@@ -17,20 +17,43 @@ def text_recognition(texts, weight):
         if return_type == 'label':
             return model.config.id2label[proba.argmax()]
         elif return_type == 'score':
-            return proba.dot([-1, 0, 1])
+            return proba
         return proba
-    for text in texts:
+
+    if gl:
+        lst = []
+        for text in texts:
+            try:
+                if get_sentiment(text, 'label') == 'negative':
+                    count -= 1
+                elif get_sentiment(text, 'label') == 'neutral':
+                    count += 0
+                elif get_sentiment(text, 'label') == 'positive':
+                    count += 1
+            except ValueError:
+                continue
+            scores = get_sentiment(text, 'score')
+            lst.append({"emotions":{'negative': scores[0], 'neutral': scores[1], 'positive': scores[2]}})
+
         try:
-            if get_sentiment(text, 'label') == 'negative':
-                count -= 1
-            elif get_sentiment(text, 'label') == 'neutral':
-                count += 0
-            elif get_sentiment(text, 'label') == 'positive':
-                count += 1
-        except ValueError:
-            continue
-    try:
-        return count/len(texts) * weight
-    except:
-        #I forgot error(
-        return count * weight
+            return count/len(texts) * weight, lst
+        except:
+            #I forgot error(
+            return count * weight, lst
+
+    else:
+        for text in texts:
+            try:
+                if get_sentiment(text, 'label') == 'negative':
+                    count -= 1
+                elif get_sentiment(text, 'label') == 'neutral':
+                    count += 0
+                elif get_sentiment(text, 'label') == 'positive':
+                    count += 1
+            except ValueError:
+                continue
+        try:
+            return count / len(texts) * weight
+        except:
+            # I forgot error(
+            return count * weight
