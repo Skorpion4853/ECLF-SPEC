@@ -9,9 +9,10 @@ requirements.txt - Файл со всеми библиотеками
 1) Установите python
 2) Выполните комманду pip install -r /path/to/requirements.txt
 3) Подайте на вход функции emotion_recognition (файл finaly work.py) аудио файл и json файл
-4) результат будет возвращен в формате текста из варинтов "Red Light" / "Green Light"
+4) результат будет возвращен в формате текста из варинтов "Red Light" / "Green Light" (и если выбран параметр - список для каждого фрагмента)
 ## Техническая документация (finaly work)
-### Функция emotion_recognition(audio, json):
+### Функция emotion_recognition(audio, json, gl):
+ - параметр gl (give list), если флаг установлен на True - помимо результата выполнения по всей аудиозаписи возвращает список по каждому фрагменту (negative neutral positive)
  - на вход данной функции должен поступать аудио в формате wav или aac, а так-же json-файл с транскрибацией
  - Json-файл отправляется в функцию json_to_list где превращается в текст
    - Этот текст отправляется в функцию text_recognition
