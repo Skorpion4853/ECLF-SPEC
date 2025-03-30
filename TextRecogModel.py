@@ -1,25 +1,23 @@
+import torch
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+model_checkpoint = 'cointegrated/rubert-tiny-sentiment-balanced'
+tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
+model = AutoModelForSequenceClassification.from_pretrained(model_checkpoint)
+if torch.cuda.is_available():
+    model.cuda()
+def get_sentiment(text, return_type='label'):
+    with torch.no_grad():
+        inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True).to(model.device)
+        proba = torch.sigmoid(model(**inputs).logits).cpu().numpy()[0]
+    if return_type == 'label':
+        return model.config.id2label[proba.argmax()]
+    elif return_type == 'score':
+        return proba
+    return proba
+
 def text_recognition(texts, weight, gl = False): #gl - give list
     #this function using rubert to clf transcription text return sum all predict * weight
-    import torch
-    from transformers import AutoTokenizer, AutoModelForSequenceClassification
-
     count = 0
-    model_checkpoint = 'cointegrated/rubert-tiny-sentiment-balanced'
-    tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
-    model = AutoModelForSequenceClassification.from_pretrained(model_checkpoint)
-    if torch.cuda.is_available():
-        model.cuda()
-
-    def get_sentiment(text, return_type='label'):
-        with torch.no_grad():
-            inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True).to(model.device)
-            proba = torch.sigmoid(model(**inputs).logits).cpu().numpy()[0]
-        if return_type == 'label':
-            return model.config.id2label[proba.argmax()]
-        elif return_type == 'score':
-            return proba
-        return proba
-
     if gl:
         lst = []
         for text in texts:

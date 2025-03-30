@@ -9,6 +9,7 @@ def json_to_list(jsonfile):
         texts = []
         for dct in json_data:
             texts.append(dct['text'])
+        json_file.close()
         return texts
     except KeyError:
         return [""]

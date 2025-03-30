@@ -1,13 +1,15 @@
+import torch
+from aniemore.recognizers.voice import VoiceRecognizer
+from aniemore.models import HuggingFaceModel
+
+model = HuggingFaceModel.Voice.WavLM
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+vr = VoiceRecognizer(model=model, device=device)
+
 def predict(file):
     #this function returned count who clf all sound
-    import torch
-    from aniemore.recognizers.voice import VoiceRecognizer
-    from aniemore.models import HuggingFaceModel
-    count = 0
-    model = HuggingFaceModel.Voice.WavLM
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    vr = VoiceRecognizer(model=model, device=device)
     pred = vr.recognize(file, return_single_label=True)
+    count = 0
     if pred == "anger" or pred == "disgust":
         count -= 1
     elif pred == "fear" or pred == 'sadness':
