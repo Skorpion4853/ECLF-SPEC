@@ -30,8 +30,8 @@ def text_recognition(texts, weight, gl = False): #gl - give list
                     count += 1
             except ValueError:
                 continue
-            scores = get_sentiment(text, 'score')
-            lst.append({"emotions":{'negative': scores[0], 'neutral': scores[1], 'positive': scores[2]}})
+        scores = get_sentiment(text, 'score')
+        lst.append({"emotions":{'negative': scores[0], 'neutral': scores[1], 'positive': scores[2]}})
 
         try:
             return count/len(texts) * weight, lst
